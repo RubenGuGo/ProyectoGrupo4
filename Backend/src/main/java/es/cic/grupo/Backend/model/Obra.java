@@ -1,80 +1,106 @@
 package es.cic.grupo.Backend.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "Obra")
 public class Obra {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    private Long id;
 
-        private Long id;
-        private String nombre;
-        private String autor;
-        private int fecha;
-        private String localizacion;
-        private String descripcion;
-        private Tipo tipo;
+    @Column(name = "NOMBRE")
+    private String nombre;
 
-        public Obra(Long id, String nombre, String autor, int fecha, String localizacion, String descripcion, Tipo tipo ) {
-            this.id = id;
-            this.nombre = nombre;
-            this.autor = autor;
-            this.fecha = fecha;
-            this.localizacion = localizacion;
-            this.descripcion = descripcion;
-            this.tipo = tipo;
-        }
+    @Column(name = "AUTOR")
+    private String autor;
 
-        public Long getId() {
-            return id;
-        }
+    @Column(name = "FECHA")
+    private int fecha;
 
-        public void setId(Long id) {
-            this.id = id;
-        }
+    @Column(name = "LOCALIZACION")
+    private String localizacion;
 
-        public String getNombre() {
-            return nombre;
-        }
+    @Column(name = "DESCRIPCION")
+    private String descripcion;
 
-        public void setNombre(String nombre) {
-            this.nombre = nombre;
-        }
+    @ManyToOne
+    @Column(name = "TIPO")
+    private Tipo tipo;
 
-        public String getAutor() {
-            return autor;
-        }
+    public Obra() {
+    }
 
-        public void setAutor(String autor) {
-            this.autor = autor;
-        }
+    public Obra(Long id, String nombre, String autor, int fecha, String localizacion, String descripcion, Tipo tipo) {
+        this.id = id;
+        this.nombre = nombre;
+        this.autor = autor;
+        this.fecha = fecha;
+        this.localizacion = localizacion;
+        this.descripcion = descripcion;
+        this.tipo = tipo;
+    }
 
-        public int getFecha() {
-            return fecha;
-        }
+    public Long getId() {
+        return id;
+    }
 
-        public void setFecha(int fecha) {
-            this.fecha = fecha;
-        }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-        public String getLocalizacion() {
-            return localizacion;
-        }
+    public String getNombre() {
+        return nombre;
+    }
 
-        public void setLocalizacion(String localizacion) {
-            this.localizacion = localizacion;
-        }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-        public String getDescripcion() {
-            return descripcion;
-        }
+    public String getAutor() {
+        return autor;
+    }
 
-        public void setDescripcion(String descripcion) {
-            this.descripcion = descripcion;
-        }
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
 
-        public Tipo getTipo() {
-            return tipo;
-        }
+    public int getFecha() {
+        return fecha;
+    }
 
-        public void setTipo(Tipo tipo) {
-            this.tipo = tipo;
-        }
+    public void setFecha(int fecha) {
+        this.fecha = fecha;
+    }
 
+    public String getLocalizacion() {
+        return localizacion;
+    }
+
+    public void setLocalizacion(String localizacion) {
+        this.localizacion = localizacion;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public Tipo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
+    }
 }
-
