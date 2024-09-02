@@ -3,20 +3,30 @@ import { RouterLink, RouterView } from 'vue-router';
 </script>
 
 <template>
-  <main>
+  <div class="app-container">
     <nav class="navbar">
       <RouterLink active-class="active" to="/">Inicio</RouterLink>
       <RouterLink active-class="active" to="/tipo">Tipos de Obras</RouterLink>
       <RouterLink active-class="active" to="/obra">Obras</RouterLink>
     </nav>
-    <RouterView />
-  </main>
+    <div class="main-content">
+      <RouterView />
+    </div>
+  </div>
 </template>
 
 <style scoped>
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden; /* Evita el desplazamiento horizontal */
+}
+
 .navbar {
   position: fixed;
   top: 0;
+  left: 0;
   width: 100%;
   background-color: #fff;
   border-bottom: 1px solid #ddd;
@@ -36,7 +46,9 @@ import { RouterLink, RouterView } from 'vue-router';
   color: #000;
 }
 
-main {
-  padding-top: 80px; /* Ajusta este valor según la altura de tu barra de navegación */
+.main-content {
+  margin-top: 60px; /* Ajusta este valor según la altura de tu barra de navegación */
+  flex: 1;
+  overflow-x: hidden; /* Evita el desplazamiento horizontal */
 }
 </style>
