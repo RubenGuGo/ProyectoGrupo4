@@ -23,7 +23,7 @@ public class ObraServicio {
     }
 
     public Obra getObraByNombre(String nombre) {
-        return obraRepositorio.findByName(nombre);
+        return obraRepositorio.findByNombre(nombre);
     }
 
     public Obra updateObra(Obra obra) {
