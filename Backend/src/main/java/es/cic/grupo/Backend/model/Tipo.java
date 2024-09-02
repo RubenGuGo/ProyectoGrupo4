@@ -18,7 +18,6 @@ public class Tipo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    @OneToMany
     @Column(name = "ID")
     private long id;
 
