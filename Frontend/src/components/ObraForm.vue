@@ -19,7 +19,7 @@ const id = route.params.id;
 const fetchObra = async () => {
   if (id) {
     try {
-      const response = await axios.get(`/API/obras/${id}`);
+      const response = await axios.get(`/api/obras/${id}`);
       Object.assign(form, response.data);
     } catch (error) {
       console.error('Error fetching obra:', error);
@@ -30,10 +30,10 @@ const fetchObra = async () => {
 const submitForm = async () => {
   try {
     if (id) {
-      await axios.put(`/API/obras/${id}`, form);
+      await axios.put(`/api/obras/${id}`, form);
       console.log('Obra actualizada:', form);
     } else {
-      await axios.post('/API/obras', form);
+      await axios.post('/api/obras', form);
       console.log('Obra creada:', form);
     }
     router.push( '/obra' ); // Redirige a la lista de obras después de enviar el formulario

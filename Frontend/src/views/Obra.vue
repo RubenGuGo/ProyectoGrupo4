@@ -8,7 +8,7 @@ const router = useRouter();
 
 const fetchObras = async () => {
   try {
-    const response = await axios.get('/API/obras');
+    const response = await axios.get('/api/obras');
     obras.value = response.data;
   } catch (error) {
     console.error('Error fetching obras:', error);
@@ -17,7 +17,7 @@ const fetchObras = async () => {
 
 const deleteObra = async (id) => {
   try {
-    await axios.delete(`/API/obras/${id}`);
+    await axios.delete(`/api/obras/${id}`);
     fetchObras(); // Refresh the list after deletion
   } catch (error) {
     console.error('Error deleting obra:', error);

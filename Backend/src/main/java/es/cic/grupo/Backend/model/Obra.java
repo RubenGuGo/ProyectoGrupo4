@@ -26,7 +26,7 @@ public class Obra {
     private String autor;
 
     @Column(name = "FECHA")
-    private int fecha;
+    private String fecha;
 
     @Column(name = "LOCALIZACION")
     private String localizacion;
@@ -42,7 +42,7 @@ public class Obra {
     public Obra() {
     }
 
-    public Obra(Long id, String nombre, String autor, int fecha, String localizacion, String descripcion) {
+    public Obra(Long id, String nombre, String autor, String fecha, String localizacion, String descripcion) {
         this.id = id;
         this.nombre = nombre;
         this.autor = autor;
@@ -75,11 +75,11 @@ public class Obra {
         this.autor = autor;
     }
 
-    public int getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(int fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 
