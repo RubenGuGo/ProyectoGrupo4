@@ -5,7 +5,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
@@ -55,8 +54,8 @@ public class ObraIntegrationTest {
 		tipo = new Tipo();
 		tipo.setNombre("Tipo de prueba");
 
-		obra1 = new Obra(null, "Nombre de prueba 1", "Autor de prueba 1", 2023, "Localización de prueba 1", "Descripción de prueba 1");
-		obra2 = new Obra(null, "Nombre de prueba 2", "Autor de prueba 2", 2023, "Localización de prueba 2", "Descripción de prueba 2");
+		obra1 = new Obra(null, "Nombre de prueba 1", "Autor de prueba 1", "2023", "Localización de prueba 1", "Descripción de prueba 1");
+		obra2 = new Obra(null, "Nombre de prueba 2", "Autor de prueba 2", "2023", "Localización de prueba 2", "Descripción de prueba 2");
 
 		tipo.addObra(obra1);
 		tipo.addObra(obra2);
@@ -68,7 +67,7 @@ public class ObraIntegrationTest {
 
 	@Test
 	public void testAddObra() throws Exception {
-		MvcResult result = mockMvc.perform(post("/API/obras")
+		MvcResult result = mockMvc.perform(post("/api/obras")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(obra1)))
 				.andExpect(status().isOk())
@@ -81,7 +80,7 @@ public class ObraIntegrationTest {
 
 	@Test
 	public void testGetAllObras() throws Exception {
-		MvcResult result = mockMvc.perform(get("/API/obras"))
+		MvcResult result = mockMvc.perform(get("/api/obras"))
 				.andExpect(status().isOk())
 				.andReturn();
 
@@ -93,7 +92,7 @@ public class ObraIntegrationTest {
 	public void testGetObraById() throws Exception {
 		Obra savedObra = obraRepositorio.save(obra1);
 
-		MvcResult result = mockMvc.perform(get("/API/obras/" + savedObra.getId()))
+		MvcResult result = mockMvc.perform(get("/api/obras/" + savedObra.getId()))
 				.andExpect(status().isOk())
 				.andReturn();
 
@@ -106,7 +105,7 @@ public class ObraIntegrationTest {
 		Obra savedObra = obraRepositorio.save(obra1);
 		savedObra.setNombre("Nombre actualizado");
 
-		MvcResult result = mockMvc.perform(put("/API/obras/" + savedObra.getId())
+		MvcResult result = mockMvc.perform(put("/api/obras/" + savedObra.getId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(savedObra)))
 				.andExpect(status().isOk())
@@ -120,7 +119,7 @@ public class ObraIntegrationTest {
 	public void testDeleteObraById() throws Exception {
 		Obra savedObra = obraRepositorio.save(obra1);
 
-		mockMvc.perform(delete("/API/obras/" + savedObra.getId()))
+		mockMvc.perform(delete("/api/obras/" + savedObra.getId()))
 				.andExpect(status().isNoContent());
 
 		assertThat(obraRepositorio.existsById(savedObra.getId())).isFalse();
