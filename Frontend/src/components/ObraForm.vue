@@ -9,8 +9,10 @@ const form = reactive({
   fecha: '',
   localizacion: '',
   descripcion: '',
-  tipo: ''
+  tipo: null // Cambia a null para almacenar el objeto Tipo
 });
+
+const tipos = reactive([]); // Array para almacenar los tipos disponibles
 
 const route = useRoute();
 const router = useRouter();
@@ -27,6 +29,15 @@ const fetchObra = async () => {
   }
 };
 
+const fetchTipos = async () => {
+  try {
+    const response = await axios.get('/api/tipos');
+    tipos.push(...response.data);
+  } catch (error) {
+    console.error('Error fetching tipos:', error);
+  }
+};
+
 const submitForm = async () => {
   try {
     if (id) {
@@ -36,7 +47,7 @@ const submitForm = async () => {
       await axios.post('/api/obras', form);
       console.log('Obra creada:', form);
     }
-    router.push( '/obra' ); // Redirige a la lista de obras después de enviar el formulario
+    router.push('/obra'); // Redirige a la lista de obras después de enviar el formulario
   } catch (error) {
     console.error('Error submitting form:', error);
   }
@@ -46,11 +57,14 @@ const cancel = () => {
   router.push('/obra');
 };
 
-onMounted(fetchObra);
+onMounted(() => {
+  fetchObra();
+  fetchTipos(); // Llama a fetchTipos cuando el componente se monta
+});
 </script>
 
 <template>
-  <h1>{{ id ? 'Modificar ' + nombre : 'Nueva Obra' }}</h1>
+  <h1>{{ id ? 'Modificar ' + form.nombre : 'Nueva Obra' }}</h1>
   <form @submit.prevent="submitForm">
     <div class="form-group">
       <label for="nombre">Nombre</label>
@@ -79,7 +93,10 @@ onMounted(fetchObra);
 
     <div class="form-group">
       <label for="tipo">Tipo</label>
-      <input type="text" id="tipo" v-model="form.tipo" required />
+      <select id="tipo" v-model="form.tipo" required>
+        <option value="" disabled>Seleccione un tipo</option>
+        <option v-for="tipo in tipos" :key="tipo.id" :value="tipo">{{ tipo.nombre }}</option>
+      </select>
     </div>
 
     <button type="submit">{{ id ? 'Modificar' : 'Crear' }}</button>
@@ -97,7 +114,7 @@ label {
   margin-bottom: 5px;
 }
 
-input, textarea {
+input, textarea, select {
   width: 100%;
   padding: 8px;
   box-sizing: border-box;

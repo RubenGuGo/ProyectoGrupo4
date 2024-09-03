@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "Obra")
@@ -31,6 +32,7 @@ public class Obra {
     @Column(name = "LOCALIZACION")
     private String localizacion;
 
+    @Size(max = 250)
     @Column(name = "DESCRIPCION")
     private String descripcion;
     
