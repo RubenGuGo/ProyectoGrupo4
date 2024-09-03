@@ -28,12 +28,17 @@ const updateObra = (id) => {
   router.push({ name: 'ObraForm', params: { id } });
 };
 
+const createObra = () => {
+  router.push({ name: 'ObraForm' });
+};
+
 onMounted(fetchObras);
 </script>
 
 <template>
   <div class="obra">
     <h1>Lista de Obras</h1>
+    <button @click="createObra" class="create-button">Crear Nueva Obra</button>
     <table>
       <thead>
         <tr>
@@ -70,6 +75,19 @@ onMounted(fetchObras);
   margin-top: 50px;
 }
 
+.create-button {
+  margin-bottom: 20px;
+  padding: 10px 15px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.create-button:hover {
+  background-color: #218838;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -96,5 +114,13 @@ button {
 
 button:hover {
   background-color: #0056b3;
+}
+
+button[type="button"] {
+  background-color: #dc3545;
+}
+
+button[type="button"]:hover {
+  background-color: #c82333;
 }
 </style>

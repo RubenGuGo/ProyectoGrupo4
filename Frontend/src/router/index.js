@@ -3,6 +3,7 @@ import Inicio from '../views/Inicio.vue'
 import Tipo from '../views/Tipo.vue'
 import Obra from '../views/Obra.vue'
 import ObraForm from '../components/ObraForm.vue'
+import TipoForm from '../components/TipoForm.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,9 +24,14 @@ const router = createRouter({
       component: Obra
     },
     {
-      path: '/obra/:id',
+      path: '/obraForm/:id?',
       name: 'ObraForm',
       component: ObraForm
+    },
+    {
+      path: '/tipoForm/:id?',
+      name: 'TipoForm',
+      component: TipoForm
     }
   ]
 })
