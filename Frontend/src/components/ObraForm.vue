@@ -131,4 +131,12 @@ button {
 button:hover {
   background-color: #0056b3;
 }
+
+button[type="button"] {
+  background-color: #dc3545;
+}
+
+button[type="button"]:hover {
+  background-color: #c82333;
+}
 </style>

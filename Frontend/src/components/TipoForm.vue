@@ -55,7 +55,7 @@ onMounted(fetchTipo);
 </script>
 
 <template>
-  <h1>{{ id ? 'Modificar ' + nombre : 'Nuevo Tipo' }}</h1>
+  <h1>{{ id ? 'Modificar ' + form.nombre : 'Nuevo Tipo' }}</h1>
   <form @submit.prevent="submitForm">
     <div class="form-group">
       <label for="nombre">Nombre</label>

@@ -53,12 +53,12 @@ onMounted(fetchTipos);
           <td>{{ tipo.nombre }}</td>
           <td>
             <ul>
-              <li v-for="obra in tipo.obras" :key="obra">{{ obra }}</li>
+              <li v-for="obra in tipo.obras" :key="obra">{{ obra.nombre }}</li>
             </ul>
           </td>
           <td>{{ tipo.descripcion }}</td>
           <td>
-            <button @click="updateTipo(tipo.id)">Actualizar/Ver</button>
+            <button @click="updateTipo(tipo.id)">Ver/Actualizar</button>
             <button @click="deleteTipo(tipo.id)">Eliminar</button>
           </td>
         </tr>

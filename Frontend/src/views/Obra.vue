@@ -60,7 +60,7 @@ onMounted(fetchObras);
           <td>{{ obra.descripcion }}</td>
           <td>{{ obra.tipo }}</td>
           <td>
-            <button @click="updateObra(obra.id)">Actualizar</button>
+            <button @click="updateObra(obra.id)">Ver/Actualizar</button>
             <button @click="deleteObra(obra.id)">Borrar</button>
           </td>
         </tr>
