@@ -37,8 +37,8 @@ onMounted(fetchTipos);
 
 <template>
   <div class="tipo">
-    <h1>Lista de Tipos</h1>
-    <button @click="createTipo" class="create-button">Crear Nuevo Tipo</button>
+    <h1>Tipos</h1>
+    <button @click="createTipo" class="create-button">Nuevo Tipo</button>
     <table>
       <thead>
         <tr>

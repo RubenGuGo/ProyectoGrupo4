@@ -47,10 +47,15 @@ const removeObra = (index) => {
   form.obras.splice(index, 1);
 };
 
+const cancel = () => {
+  router.push('/obra');
+};
+
 onMounted(fetchTipo);
 </script>
 
 <template>
+  <h1>{{ id ? 'Modificar ' + nombre : 'Nuevo Tipo' }}</h1>
   <form @submit.prevent="submitForm">
     <div class="form-group">
       <label for="nombre">Nombre</label>
@@ -72,6 +77,7 @@ onMounted(fetchTipo);
     </div>
 
     <button type="submit">Enviar</button>
+    <button type="button" @click="cancel">Cancelar</button>
   </form>
 </template>
 
