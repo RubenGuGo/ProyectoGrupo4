@@ -48,7 +48,7 @@ const removeObra = (index) => {
 };
 
 const cancel = () => {
-  router.push('/obra');
+  router.push('/tipo');
 };
 
 onMounted(fetchTipo);
@@ -65,15 +65,6 @@ onMounted(fetchTipo);
     <div class="form-group">
       <label for="descripcion">Descripción</label>
       <textarea id="descripcion" v-model="form.descripcion" required></textarea>
-    </div>
-
-    <div class="form-group">
-      <label for="obras">Obras</label>
-      <div v-for="(obra, index) in form.obras" :key="index" class="obra-item">
-        <input type="text" v-model="form.obras[index]" placeholder="Nombre de la obra" required />
-        <button type="button" @click="removeObra(index)">Eliminar</button>
-      </div>
-      <button type="button" @click="addObra">Agregar Obra</button>
     </div>
 
     <button type="submit">Enviar</button>
