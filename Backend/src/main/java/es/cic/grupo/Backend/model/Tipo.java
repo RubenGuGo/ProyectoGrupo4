@@ -3,6 +3,8 @@ package es.cic.grupo.Backend.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,7 +19,6 @@ import jakarta.persistence.Table;
 public class Tipo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     @Column(name = "ID")
     private long id;
 
@@ -26,7 +27,8 @@ public class Tipo {
 
     @Column(name = "DESCRIPCION")
     private String descripcion;
-
+    
+    @JsonManagedReference
     @OneToMany(mappedBy = "tipo")
     private List<Obra> obras;
     
@@ -37,6 +39,18 @@ public class Tipo {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.obras = obras;
+    }
+
+    public Tipo(Long id, String nombre, String descripcion) {
+    
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.obras = new ArrayList<>();
+    }
+
+    public Tipo() {
+    this.obras = new ArrayList<>();
     }
     
     public long getId() {
@@ -69,6 +83,11 @@ public class Tipo {
     
     public void setObras(ArrayList<Obra> obras) {
         this.obras = obras;
+    }
+
+    public void addObra(Obra obra) {
+        this.obras.add(obra);
+        obra.setTipo(this);
     }
 
 }

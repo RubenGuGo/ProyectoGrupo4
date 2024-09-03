@@ -1,5 +1,7 @@
 package es.cic.grupo.Backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,7 +33,8 @@ public class Obra {
 
     @Column(name = "DESCRIPCION")
     private String descripcion;
-
+    
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "TIPO_ID")
     private Tipo tipo;
@@ -39,14 +42,13 @@ public class Obra {
     public Obra() {
     }
 
-    public Obra(Long id, String nombre, String autor, int fecha, String localizacion, String descripcion, Tipo tipo) {
+    public Obra(Long id, String nombre, String autor, int fecha, String localizacion, String descripcion) {
         this.id = id;
         this.nombre = nombre;
         this.autor = autor;
         this.fecha = fecha;
         this.localizacion = localizacion;
-        this.descripcion = descripcion;
-        this.tipo = tipo;
+        this.descripcion = descripcion;;
     }
 
     public Long getId() {
@@ -104,4 +106,5 @@ public class Obra {
     public void setTipo(Tipo tipo) {
         this.tipo = tipo;
     }
+
 }
