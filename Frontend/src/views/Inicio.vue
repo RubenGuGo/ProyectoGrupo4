@@ -1,6 +1,3 @@
-<script setup>
-</script>
-
 <template>
   <main class="inicio">
     <h1>Bienvenido al Museo de Arte</h1>
@@ -11,12 +8,14 @@
 <style scoped>
 .inicio {
   text-align: center;
-  margin-top: 50px;
+  margin-top: 0;
   height: 100vh; /* Ocupa toda la altura de la pantalla */
   background-image: url('../assets/FondoMonet.jpg'); /* Ruta a tu imagen de fondo */
   background-size: cover; /* Asegura que la imagen cubra toda la pantalla */
   background-position: center; /* Centra la imagen */
   background-repeat: no-repeat; /* Evita que la imagen se repita */
+  display: flex; /* Utiliza flexbox para centrar el contenido */
+  flex-direction: column; /* Alinea los elementos en columna */
 }
 
 .inicio h1 {
