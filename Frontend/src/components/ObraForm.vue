@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, onMounted } from 'vue';
+import { reactive, onMounted, ref } from 'vue';
 import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -13,6 +13,8 @@ const form = reactive({
 });
 
 const tipos = reactive([]); // Array para almacenar los tipos disponibles
+const showModal = ref(false); // Estado para controlar la visibilidad del modal
+const modalMessage = ref(''); // Mensaje del modal
 
 const route = useRoute();
 const router = useRouter();
@@ -38,7 +40,38 @@ const fetchTipos = async () => {
   }
 };
 
+const validateForm = () => {
+  if (form.nombre.length > 200) {
+    modalMessage.value = 'El nombre no puede exceder los 200 caracteres.';
+    showModal.value = true;
+    return false;
+  }
+  if (form.autor.length > 200) {
+    modalMessage.value = 'El autor no puede exceder los 200 caracteres.';
+    showModal.value = true;
+    return false;
+  }
+  if (form.fecha.length > 100) {
+    modalMessage.value = 'La fecha no puede exceder los 100 caracteres.';
+    showModal.value = true;
+    return false;
+  }
+  if (form.localizacion.length > 200) {
+    modalMessage.value = 'La localización no puede exceder los 200 caracteres.';
+    showModal.value = true;
+    return false;
+  }
+  if (form.descripcion.length > 500) {
+    modalMessage.value = 'La descripción no puede exceder los 500 caracteres.';
+    showModal.value = true;
+    return false;
+  }
+  return true;
+};
+
 const submitForm = async () => {
+  if (!validateForm()) return;
+
   try {
     if (id) {
       await axios.put(`/api/obras/${id}`, form);
@@ -104,6 +137,13 @@ onMounted(() => {
     <button type="submit">{{ id ? 'Modificar' : 'Crear' }}</button>
     <button type="button" @click="cancel">Cancelar</button>
   </form>
+
+  <div v-if="showModal" class="modal">
+    <div class="modal-content">
+      <span class="close" @click="showModal = false">&times;</span>
+      <p>{{ modalMessage }}</p>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -140,5 +180,42 @@ button[type="button"] {
 
 button[type="button"]:hover {
   background-color: #c82333;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 </style>
