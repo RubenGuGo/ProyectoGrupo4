@@ -17,7 +17,7 @@ import es.cic.grupo.Backend.model.Tipo;
 import es.cic.grupo.Backend.service.TipoServicio;
 
 @RestController
-@RequestMapping("/API/tipos")
+@RequestMapping("/api/tipos")
 public class TipoControlador {
 
     @Autowired

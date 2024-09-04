@@ -47,10 +47,15 @@ const removeObra = (index) => {
   form.obras.splice(index, 1);
 };
 
+const cancel = () => {
+  router.push('/tipo');
+};
+
 onMounted(fetchTipo);
 </script>
 
 <template>
+  <h1>{{ id ? 'Modificar ' + form.nombre : 'Nuevo Tipo' }}</h1>
   <form @submit.prevent="submitForm">
     <div class="form-group">
       <label for="nombre">Nombre</label>
@@ -62,16 +67,8 @@ onMounted(fetchTipo);
       <textarea id="descripcion" v-model="form.descripcion" required></textarea>
     </div>
 
-    <div class="form-group">
-      <label for="obras">Obras</label>
-      <div v-for="(obra, index) in form.obras" :key="index" class="obra-item">
-        <input type="text" v-model="form.obras[index]" placeholder="Nombre de la obra" required />
-        <button type="button" @click="removeObra(index)">Eliminar</button>
-      </div>
-      <button type="button" @click="addObra">Agregar Obra</button>
-    </div>
-
     <button type="submit">Enviar</button>
+    <button type="button" @click="cancel">Cancelar</button>
   </form>
 </template>
 

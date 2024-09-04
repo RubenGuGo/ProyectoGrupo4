@@ -6,7 +6,7 @@ import { RouterLink, RouterView } from 'vue-router';
   <div class="app-container">
     <nav class="navbar">
       <RouterLink active-class="active" to="/">Inicio</RouterLink>
-      <RouterLink active-class="active" to="/tipo">Tipos de Obras</RouterLink>
+      <RouterLink active-class="active" to="/tipo">Tipos</RouterLink>
       <RouterLink active-class="active" to="/obra">Obras</RouterLink>
     </nav>
     <div class="main-content">
@@ -21,6 +21,11 @@ import { RouterLink, RouterView } from 'vue-router';
   flex-direction: column;
   min-height: 100vh;
   overflow-x: hidden; /* Evita el desplazamiento horizontal */
+}
+
+.active {
+  font-weight: bold;
+  color: #b82d2d;
 }
 
 .navbar {

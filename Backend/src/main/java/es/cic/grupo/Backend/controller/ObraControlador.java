@@ -17,7 +17,7 @@ import es.cic.grupo.Backend.model.Obra;
 import es.cic.grupo.Backend.service.ObraServicio;
 
 @RestController
-@RequestMapping("/API/obras")
+@RequestMapping("/api/obras")
 public class ObraControlador {
 
     @Autowired

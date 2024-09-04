@@ -37,8 +37,9 @@ onMounted(fetchTipos);
 
 <template>
   <div class="tipo">
-    <h1>Lista de Tipos</h1>
-    <button @click="createTipo" class="create-button">Crear Nuevo Tipo</button>
+    <h1>Bienvenido a nuestra sección de tipos de obras</h1>
+    <p>Aquí puedes explorar, crear, actualizar y eliminar los distintos tipos de obras de arte  </p> 
+    <button @click="createTipo" class="create-button">Nuevo Tipo</button>
     <table>
       <thead>
         <tr>
@@ -53,12 +54,12 @@ onMounted(fetchTipos);
           <td>{{ tipo.nombre }}</td>
           <td>
             <ul>
-              <li v-for="obra in tipo.obras" :key="obra">{{ obra }}</li>
+              <li v-for="obra in tipo.obras" :key="obra">{{ obra.nombre }}</li>
             </ul>
           </td>
           <td>{{ tipo.descripcion }}</td>
           <td>
-            <button @click="updateTipo(tipo.id)">Actualizar/Ver</button>
+            <button @click="updateTipo(tipo.id)">Ver/Actualizar</button>
             <button @click="deleteTipo(tipo.id)">Eliminar</button>
           </td>
         </tr>
@@ -95,10 +96,19 @@ table {
 th, td {
   border: 1px solid #ddd;
   padding: 8px;
+  max-width: 150px; /* Ajusta el ancho máximo según sea necesario */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 th {
   background-color: #f2f2f2;
+}
+
+td {
+  word-wrap: break-word; /* Permite que el texto se envuelva */
+  white-space: pre-wrap; /* Mantiene los saltos de línea y espacios en blanco */
 }
 
 button {
