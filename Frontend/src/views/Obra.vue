@@ -37,7 +37,8 @@ onMounted(fetchObras);
 
 <template>
   <div class="obra">
-    <h1>Obras</h1>
+    <h1>Bienvenido a nuestra colección de obras</h1>
+    <p>Aquí puedes explorar, crear, actualizar y eliminar obras de arte</p> 
     <button @click="createObra" class="create-button">Nueva Obra</button>
     <table>
       <thead>
@@ -97,10 +98,19 @@ table {
 th, td {
   border: 1px solid #ddd;
   padding: 8px;
+  max-width: 150px; /* Ajusta el ancho máximo según sea necesario */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 th {
   background-color: #f2f2f2;
+}
+
+td {
+  word-wrap: break-word; /* Permite que el texto se envuelva */
+  white-space: pre-wrap; /* Mantiene los saltos de línea y espacios en blanco */
 }
 
 button {

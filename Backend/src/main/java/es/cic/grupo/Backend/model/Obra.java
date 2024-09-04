@@ -20,19 +20,23 @@ public class Obra {
     @Column(name = "ID")
     private Long id;
 
+    @Size(max = 200)
     @Column(name = "NOMBRE")
     private String nombre;
 
+    @Size(max = 200)
     @Column(name = "AUTOR")
     private String autor;
 
+    @Size(max = 100)
     @Column(name = "FECHA")
     private String fecha;
 
+    @Size(max = 200)
     @Column(name = "LOCALIZACION")
     private String localizacion;
 
-    @Size(max = 250)
+    @Size(max = 500)
     @Column(name = "DESCRIPCION")
     private String descripcion;
     

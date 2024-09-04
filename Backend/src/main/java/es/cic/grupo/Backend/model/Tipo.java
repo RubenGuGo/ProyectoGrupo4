@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "Tipo")
@@ -22,9 +23,11 @@ public class Tipo {
     @Column(name = "ID")
     private long id;
 
+    @Size(max = 200)
     @Column(name = "NOMBRE")
     private String nombre;
 
+    @Size(max = 500)
     @Column(name = "DESCRIPCION")
     private String descripcion;
     
