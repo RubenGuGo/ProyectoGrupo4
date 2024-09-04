@@ -1,15 +1,17 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
 const obras = ref([]);
+const avisos = ref([]); // Estado para los mensajes de aviso
 const router = useRouter();
 
 const fetchObras = async () => {
   try {
     const response = await axios.get('/api/obras');
     obras.value = response.data;
+    checkAviso(); // Verificar si hay un mensaje de aviso en localStorage
   } catch (error) {
     console.error('Error fetching obras:', error);
   }
@@ -19,17 +21,34 @@ const deleteObra = async (id) => {
   try {
     await axios.delete(`/api/obras/${id}`);
     fetchObras(); // Refresh the list after deletion
+    showAviso('Obra borrada exitosamente'); // Actualizar mensaje de aviso
   } catch (error) {
     console.error('Error deleting obra:', error);
   }
 };
 
-const updateObra = (id) => {
+const updateObra = async (id) => {
   router.push({ name: 'ObraForm', params: { id } });
 };
 
-const createObra = () => {
+const createObra = async () => {
   router.push({ name: 'ObraForm' });
+};
+
+const showAviso = (mensaje) => {
+  const id = Date.now();
+  avisos.value.push({ id, mensaje });
+  setTimeout(() => {
+    avisos.value = avisos.value.filter(aviso => aviso.id !== id);
+  }, 5000); // Ocultar el mensaje después de 5 segundos
+};
+
+const checkAviso = () => {
+  const mensaje = localStorage.getItem('aviso');
+  if (mensaje) {
+    showAviso(mensaje);
+    localStorage.removeItem('aviso'); // Eliminar el mensaje de localStorage después de mostrarlo
+  }
 };
 
 onMounted(fetchObras);
@@ -40,6 +59,7 @@ onMounted(fetchObras);
     <h1>Bienvenido a nuestra colección de obras</h1>
     <p>Aquí puedes explorar, crear, actualizar y eliminar obras de arte</p> 
     <button @click="createObra" class="create-button">Nueva Obra</button>
+    <div v-for="aviso in avisos" :key="aviso.id" class="modal-aviso">{{ aviso.mensaje }}</div> <!-- Mostrar mensajes de aviso -->
     <table>
       <thead>
         <tr>
@@ -59,7 +79,7 @@ onMounted(fetchObras);
           <td>{{ obra.fecha }}</td>
           <td>{{ obra.localizacion }}</td>
           <td>{{ obra.descripcion }}</td>
-          <td>{{ obra.tipo }}</td>
+          <td>{{ obra.tipo }}</td> 
           <td>
             <button @click="updateObra(obra.id)">Ver/Actualizar</button>
             <button @click="deleteObra(obra.id)">Borrar</button>
@@ -87,6 +107,19 @@ onMounted(fetchObras);
 
 .create-button:hover {
   background-color: #218838;
+}
+
+.modal-aviso {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  margin-top: 10px; /* Espacio entre mensajes */
 }
 
 table {

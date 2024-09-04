@@ -29,22 +29,16 @@ const submitForm = async () => {
     if (id) {
       await axios.put(`/api/tipos/${id}`, form);
       console.log('Tipo actualizado:', form);
+      localStorage.setItem('aviso', 'Tipo actualizado exitosamente'); // Guardar mensaje de aviso
     } else {
       await axios.post('/api/tipos', form);
       console.log('Tipo creado:', form);
+      localStorage.setItem('aviso', 'Tipo creado exitosamente'); // Guardar mensaje de aviso
     }
     router.push('/tipo'); // Redirige a la lista de tipos después de enviar el formulario
   } catch (error) {
     console.error('Error submitting form:', error);
   }
-};
-
-const addObra = () => {
-  form.obras.push('');
-};
-
-const removeObra = (index) => {
-  form.obras.splice(index, 1);
 };
 
 const cancel = () => {
@@ -86,17 +80,6 @@ input, textarea {
   width: 100%;
   padding: 8px;
   box-sizing: border-box;
-}
-
-.obra-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.obra-item input {
-  flex: 1;
-  margin-right: 10px;
 }
 
 button {
