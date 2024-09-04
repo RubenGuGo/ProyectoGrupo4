@@ -1,6 +1,7 @@
 package es.cic.grupo.Backend.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +15,9 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "Obra")
+@JsonIdentityInfo(
+  generator = ObjectIdGenerators.PropertyGenerator.class, 
+  property = "id")
 public class Obra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +44,6 @@ public class Obra {
     @Column(name = "DESCRIPCION")
     private String descripcion;
     
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "TIPO_ID")
     private Tipo tipo;

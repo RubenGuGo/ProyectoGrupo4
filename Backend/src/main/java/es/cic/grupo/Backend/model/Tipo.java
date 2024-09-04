@@ -3,7 +3,8 @@ package es.cic.grupo.Backend.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,7 +17,9 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "Tipo")
-
+@JsonIdentityInfo(
+  generator = ObjectIdGenerators.PropertyGenerator.class, 
+  property = "id")
 public class Tipo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +34,6 @@ public class Tipo {
     @Column(name = "DESCRIPCION")
     private String descripcion;
     
-    @JsonManagedReference
     @OneToMany(mappedBy = "tipo")
     private List<Obra> obras;
     
