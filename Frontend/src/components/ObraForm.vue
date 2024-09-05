@@ -165,7 +165,7 @@ onMounted(() => {
       <div class="form-actions">
         <button type="submit" class="submit-button" v-if="isEditable">{{ id ? 'Modificar' : 'Crear' }}</button>
         <button type="button" @click="enableEditing" v-if="!isEditable" class="enable-edit-button">Habilitar Edición</button>
-    <button type="button" @click="cancel" class="cancel-button" class="cancel-button">Cancelar</button>
+        <button type="button" @click="cancel" class="cancel-button">Cancelar</button>
       </div>
     </form>
 
@@ -270,6 +270,15 @@ button {
   box-shadow: 0 6px 14px rgba(72, 187, 120, 0.6);
 }
 
+/* Botón de Habilitar */
+.enable-edit-button {
+  background-color: #28a745;
+}
+
+.enable-edit-button:hover {
+  background-color: #218838;
+}
+
 /* Botón de cancelar */
 .cancel-button {
   background-color: #e53e3e;
@@ -341,9 +350,6 @@ button {
   background-color: #c53030;
 }
 
-button[type="button"] {
-  background-color: #dc3545;
-}
 
 .cancel-button:hover {
   background-color: #c82333;

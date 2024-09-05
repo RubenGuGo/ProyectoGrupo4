@@ -109,8 +109,8 @@ onMounted(fetchTipo);
 
       <div class="form-actions">
         <button type="submit" class="submit-button" v-if="isEditable">{{ id ? 'Modificar' : 'Crear' }}</button>
-    <button type="button" @click="enableEditing" v-if="!isEditable" class="enable-edit-button">Habilitar Edición</button>
-        <button type="button" @click="cancel" class="cancel-button" class="cancel-button">Cancelar</button>
+        <button type="button" @click="enableEditing" v-if="!isEditable" class="enable-edit-button">Habilitar Edición</button>
+        <button type="button" @click="cancel" class="cancel-button">Cancelar</button>
       </div>
     </form>
 
