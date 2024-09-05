@@ -106,7 +106,7 @@ onMounted(fetchObras);
             <td>{{ obra.fecha }}</td>
             <td>{{ obra.localizacion }}</td>
             <td>{{ obra.descripcion }}</td>
-            <td>{{ obra.tipo }}</td>
+            <td>{{ obra.tipo.nombre }}</td>
             <td class="action-buttons">
               <button @click="viewObra(obra.id)" class="action-button">Ver</button>
               <button @click="updateObra(obra.id)" class="action-button">Editar</button>
@@ -179,7 +179,7 @@ onMounted(fetchObras);
 
 .modal-aviso {
   position: fixed;
-  top: 20px;
+  top: 85px; /* Ajusta este valor para mover los avisos más abajo */
   right: 20px; /* Cambiado a la esquina superior derecha */
   transform: none; /* Eliminado el translateX para evitar centrado */
   background-color: #28a745;
@@ -283,6 +283,7 @@ tbody tr:hover {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000; /* Aumentar el z-index para que se superponga a todos los elementos */
 }
 
 .delete-dialog-content {
