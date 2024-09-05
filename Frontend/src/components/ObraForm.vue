@@ -18,6 +18,9 @@ const showConfirmationDialog = ref(false);
 const isConfirming = ref(false);
 
 const tipos = reactive([]); // Array para almacenar los tipos disponibles
+const showModal = ref(false); // Estado para controlar la visibilidad del modal
+const modalMessage = ref(''); // Mensaje del modal
+const isEditable = ref(false); // Estado para controlar si el formulario es editable
 
 const route = useRoute();
 const router = useRouter();
@@ -28,9 +31,12 @@ const fetchObra = async () => {
     try {
       const response = await axios.get(`/api/obras/${id}`);
       Object.assign(form, response.data);
+      isEditable.value = false; // Deshabilitar edición al cargar la obra
     } catch (error) {
       console.error('Error fetching obra:', error);
     }
+  } else {
+    isEditable.value = true; // Habilitar edición si no hay id (crear nueva obra)
   }
 };
 
@@ -43,6 +49,35 @@ const fetchTipos = async () => {
   }
 };
 
+const validateForm = () => {
+  if (form.nombre.length > 200) {
+    modalMessage.value = 'El nombre no puede exceder los 200 caracteres.';
+    showModal.value = true;
+    return false;
+  }
+  if (form.autor.length > 200) {
+    modalMessage.value = 'El autor no puede exceder los 200 caracteres.';
+    showModal.value = true;
+    return false;
+  }
+  if (form.fecha.length > 100) {
+    modalMessage.value = 'La fecha no puede exceder los 100 caracteres.';
+    showModal.value = true;
+    return false;
+  }
+  if (form.localizacion.length > 200) {
+    modalMessage.value = 'La localización no puede exceder los 200 caracteres.';
+    showModal.value = true;
+    return false;
+  }
+  if (form.descripcion.length > 500) {
+    modalMessage.value = 'La descripción no puede exceder los 500 caracteres.';
+    showModal.value = true;
+    return false;
+  }
+  return true;
+};
+
 const submitForm = () => {
   showConfirmationDialog.value = true;
 };
@@ -50,6 +85,8 @@ const submitForm = () => {
 const confirmSubmit = async () => {
   showConfirmationDialog.value = false;
   isConfirming.value = true;
+  if (!validateForm()) return;
+
   try {
     if (id) {
       await axios.put(`/api/obras/${id}`, form);
@@ -66,6 +103,10 @@ const confirmSubmit = async () => {
   } finally {
     isConfirming.value = false;
   }
+};
+
+const enableEditing = () => {
+  isEditable.value = true;
 };
 
 const cancelSubmit = () => {
@@ -90,39 +131,40 @@ onMounted(() => {
     <form @submit.prevent="submitForm">
       <div class="form-group">
         <label for="nombre">Nombre</label>
-        <input type="text" id="nombre" v-model="form.nombre" required />
+        <input type="text" id="nombre" v-model="form.nombre" :readonly="!isEditable" required />
       </div>
 
       <div class="form-group">
         <label for="autor">Autor</label>
-        <input type="text" id="autor" v-model="form.autor" required />
+        <input type="text" id="autor" v-model="form.autor" :readonly="!isEditable" required />
       </div>
 
       <div class="form-group">
         <label for="fecha">Fecha</label>
-        <input type="text" id="fecha" v-model="form.fecha" required />
+        <input type="text" id="fecha" v-model="form.fecha" :readonly="!isEditable" required />
       </div>
 
       <div class="form-group">
         <label for="localizacion">Localización</label>
-        <input type="text" id="localizacion" v-model="form.localizacion" required />
+        <input type="text" id="localizacion" v-model="form.localizacion" :readonly="!isEditable" required />
       </div>
 
       <div class="form-group">
         <label for="descripcion">Descripción</label>
-        <textarea id="descripcion" v-model="form.descripcion" required></textarea>
+        <textarea id="descripcion" v-model="form.descripcion" :readonly="!isEditable" required></textarea>
       </div>
 
       <div class="form-group">
         <label for="tipo">Tipo</label>
-        <select id="tipo" v-model="form.tipo" required>
+        <select id="tipo" v-model="form.tipo" :disabled="!isEditable" required>
           <option value="" disabled>Seleccione un tipo</option>
           <option v-for="tipo in tipos" :key="tipo.id" :value="tipo">{{ tipo.nombre }}</option>
         </select>
       </div>
 
       <div class="form-actions">
-        <button type="submit" class="submit-button">{{ id ? 'Modificar' : 'Crear' }}</button>
+        <button type="submit" class="submit-button" v-if="isEditable">{{ id ? 'Modificar' : 'Crear' }}</button>
+        <button type="button" @click="enableEditing" v-if="!isEditable" class="enable-edit-button">Habilitar Edición</button>
         <button type="button" @click="cancel" class="cancel-button">Cancelar</button>
       </div>
     </form>
@@ -136,6 +178,13 @@ onMounted(() => {
           <button @click="cancelSubmit" class="cancel-button">Cancelar</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div v-if="showModal" class="modal">
+    <div class="modal-content">
+      <span class="close" @click="showModal = false">&times;</span>
+      <p>{{ modalMessage }}</p>
     </div>
   </div>
 </template>
@@ -221,6 +270,15 @@ button {
   box-shadow: 0 6px 14px rgba(72, 187, 120, 0.6);
 }
 
+/* Botón de Habilitar */
+.enable-edit-button {
+  background-color: #28a745;
+}
+
+.enable-edit-button:hover {
+  background-color: #218838;
+}
+
 /* Botón de cancelar */
 .cancel-button {
   background-color: #e53e3e;
@@ -292,11 +350,45 @@ button {
   background-color: #c53030;
 }
 
-button[type="button"] {
-  background-color: #dc3545;
+
+.cancel-button:hover {
+  background-color: #c82333;
 }
 
-button[type="button"]:hover {
-  background-color: #c82333;
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 </style>
