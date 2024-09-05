@@ -49,8 +49,12 @@ const cancelDelete = () => {
   obraToDelete.value = null; // Limpia el ID de la obra a eliminar
 };
 
+const viewObra = async (id) => {
+  router.push({ name: 'ObraForm', params: { id }, query: { readonly: true } });
+};
+
 const updateObra = async (id) => {
-  router.push({ name: 'ObraForm', params: { id } });
+  router.push({ name: 'ObraForm', params: { id }, query: { readonly: false } });
 };
 
 const createObra = async () => {
@@ -102,9 +106,10 @@ onMounted(fetchObras);
             <td>{{ obra.fecha }}</td>
             <td>{{ obra.localizacion }}</td>
             <td>{{ obra.descripcion }}</td>
-            <td>{{ obra.tipo }}</td>
-            <td>
-              <button @click="updateObra(obra.id)" class="action-button">Ver/Actualizar</button>
+            <td>{{ obra.tipo.nombre }}</td>
+            <td class="action-buttons">
+              <button @click="viewObra(obra.id)" class="action-button">Ver</button>
+              <button @click="updateObra(obra.id)" class="action-button">Editar</button>
               <button @click="deleteObra(obra.id)" class="action-button delete-button">Borrar</button>
             </td>
           </tr>
@@ -127,7 +132,7 @@ onMounted(fetchObras);
 
 <style scoped>
 .obra-container {
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 40px auto; /* Ajuste en el margen superior */
   padding: 20px;
   background-color: #1b262c;
@@ -235,6 +240,11 @@ td {
 
 tbody tr:hover {
   background-color: #28527a;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px; /* Espacio entre los botones */
 }
 
 .action-button {
