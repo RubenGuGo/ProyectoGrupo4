@@ -229,6 +229,13 @@ th {
   letter-spacing: 1px;
 }
 
+td {
+  word-wrap: break-word; /* Asegura que las palabras largas se rompan */
+  white-space: normal; /* Permite que el texto se ajuste al ancho de la celda */
+  overflow-wrap: break-word; /* Asegura que las palabras largas se rompan */
+  max-width: 200px; /* Ajusta este valor según sea necesario */
+}
+
 /* Filas de la tabla */
 tbody tr {
   background-color: #1b262c;  /* Azul marino oscuro */

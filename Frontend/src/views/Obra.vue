@@ -134,6 +134,8 @@ onMounted(fetchObras);
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
   color: #bbe1fa;
   text-align: center; /* Cambiado de center a left para un mejor alineamiento */
+  word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 
@@ -189,6 +191,8 @@ onMounted(fetchObras);
   margin-top: 20px;
   background-color: #1c3b4d;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 th, td {
@@ -212,8 +216,10 @@ tbody tr {
 }
 
 td {
-  word-wrap: break-word;
-  white-space: pre-wrap;
+  word-wrap: break-word; /* Asegura que las palabras largas se rompan */
+  white-space: normal; /* Permite que el texto se ajuste al ancho de la celda */
+  overflow-wrap: break-word; /* Asegura que las palabras largas se rompan */
+  max-width: 200px; /* Ajusta este valor según sea necesario */
 }
 
 tbody tr:hover {
