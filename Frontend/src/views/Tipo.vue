@@ -195,7 +195,7 @@ onMounted(fetchTipos);
 /* Modal de Aviso */
 .modal-aviso {
   position: fixed;
-  top: 20px;
+  top: 85px;
   right: 20px;
   background-color: #28a745;
   color: white;

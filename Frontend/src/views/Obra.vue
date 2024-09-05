@@ -179,7 +179,7 @@ onMounted(fetchObras);
 
 .modal-aviso {
   position: fixed;
-  top: 20px;
+  top: 85px; /* Ajusta este valor para mover los avisos más abajo */
   right: 20px; /* Cambiado a la esquina superior derecha */
   transform: none; /* Eliminado el translateX para evitar centrado */
   background-color: #28a745;
