@@ -54,7 +54,7 @@ public class Obra {
         this.autor = autor;
         this.fecha = fecha;
         this.localizacion = localizacion;
-        this.descripcion = descripcion;;
+        this.descripcion = descripcion;
     }
 
     public Long getId() {
