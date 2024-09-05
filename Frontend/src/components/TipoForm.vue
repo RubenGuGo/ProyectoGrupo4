@@ -27,7 +27,7 @@ const fetchTipo = async () => {
     try {
       const response = await axios.get(`/api/tipos/${id}`);
       Object.assign(form, response.data);
-      isEditable.value = false; // Deshabilitar edición al cargar el tipo
+      isEditable.value = route.query.readonly !== 'true'; // Deshabilitar edición si readonly es true
     } catch (error) {
       console.error('Error fetching tipo:', error);
     }
@@ -86,10 +86,6 @@ const confirmSubmit = async () => {
   }
 };
 
-const enableEditing = () => {
-  isEditable.value = true;
-};
-
 const cancelSubmit = () => {
   showConfirmationDialog.value = false;
 };
@@ -105,7 +101,6 @@ const truncate = (text, length) => {
 onMounted(fetchTipo);
 </script>
 
-
 <template>
   <div class="form-container">
     <h1>{{ id ? 'Modificar ' + form.nombre : 'Nuevo Tipo' }}</h1>
@@ -120,7 +115,8 @@ onMounted(fetchTipo);
         <textarea id="descripcion" v-model="form.descripcion" :readonly="!isEditable" required></textarea>
       </div>
 
-      <div class="form-group">
+      <!-- Mostrar la sección de Obras solo si hay un id (es decir, cuando se está editando un tipo existente) -->
+      <div class="form-group" v-if="id">
         <label>Obras</label>
         <ul class="obras-list">
           <li v-for="obra in form.obras" :key="obra.id">{{ truncate(obra.nombre, 50) }}</li>
@@ -128,8 +124,7 @@ onMounted(fetchTipo);
       </div>
 
       <div class="form-actions">
-        <button type="submit" class="submit-button" v-if="isEditable">{{ id ? 'Modificar' : 'Crear' }}</button>
-        <button type="button" @click="enableEditing" v-if="!isEditable" class="enable-edit-button">Habilitar Edición</button>
+        <button type="submit" class="submit-button" v-if="isEditable">{{ id ? 'Guardar cambios' : 'Crear' }}</button>
         <button type="button" @click="cancel" class="cancel-button">Cancelar</button>
       </div>
     </form>

@@ -59,8 +59,12 @@ const cancelError = () => {
   showErrorDialog.value = false; // Oculta la ventana emergente de error
 };
 
-const updateTipo = (id) => {
-  router.push({ name: 'TipoForm', params: { id } });
+const viewTipo = (id) => {
+  router.push({ name: 'TipoForm', params: { id }, query: { readonly: true } });
+};
+
+const editTipo = (id) => {
+  router.push({ name: 'TipoForm', params: { id }, query: { readonly: false } });
 };
 
 const createTipo = () => {
@@ -108,7 +112,8 @@ onMounted(fetchTipos);
             <td>{{ tipo.obras.length }}</td> <!-- Mostrar el número total de obras -->
             <td>{{ tipo.descripcion }}</td>
             <td>
-              <button @click="updateTipo(tipo.id)" class="action-button">Ver/Actualizar</button>
+              <button @click="viewTipo(tipo.id)" class="action-button">Ver</button>
+              <button @click="editTipo(tipo.id)" class="action-button">Editar</button>
               <button @click="deleteTipo(tipo.id)" class="action-button delete-button">Eliminar</button>
             </td>
           </tr>

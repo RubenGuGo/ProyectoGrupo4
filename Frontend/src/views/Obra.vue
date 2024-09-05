@@ -106,7 +106,7 @@ onMounted(fetchObras);
             <td>{{ obra.fecha }}</td>
             <td>{{ obra.localizacion }}</td>
             <td>{{ obra.descripcion }}</td>
-            <td>{{ obra.tipo.nombre }}</td>
+            <td>{{ obra.tipo }}</td>
             <td class="action-buttons">
               <button @click="viewObra(obra.id)" class="action-button">Ver</button>
               <button @click="updateObra(obra.id)" class="action-button">Editar</button>

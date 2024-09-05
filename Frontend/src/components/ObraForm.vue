@@ -6,63 +6,40 @@ import { useRoute, useRouter } from 'vue-router';
 // Estado del formulario
 const form = reactive({
   nombre: '',
-  autor: '',
-  fecha: '',
-  localizacion: '',
   descripcion: '',
-  tipo: null // Cambia a null para almacenar el objeto Tipo
+  obras: []
 });
 
 // Estado para la ventana emergente
 const showConfirmationDialog = ref(false);
 const isConfirming = ref(false);
 
-const tipos = reactive([]); // Array para almacenar los tipos disponibles
-const showModal = ref(false); // Estado para controlar la visibilidad del modal
-const modalMessage = ref(''); // Mensaje del modal
-
 const route = useRoute();
 const router = useRouter();
 const id = route.params.id;
+const readonly = route.query.readonly === 'true'; // Obtener el parámetro readonly de la URL
 
-const fetchObra = async () => {
+const showModal = ref(false); // Estado para controlar la visibilidad del modal
+const modalMessage = ref(''); // Mensaje del modal
+const isEditable = ref(!readonly); // Estado para controlar si el formulario es editable
+
+const fetchTipo = async () => {
   if (id) {
     try {
-      const response = await axios.get(`/api/obras/${id}`);
+      const response = await axios.get(`/api/tipos/${id}`);
       Object.assign(form, response.data);
+      isEditable.value = !readonly; // Deshabilitar edición si es solo lectura
     } catch (error) {
-      console.error('Error fetching obra:', error);
+      console.error('Error fetching tipo:', error);
     }
-  }
-};
-
-const fetchTipos = async () => {
-  try {
-    const response = await axios.get('/api/tipos');
-    tipos.push(...response.data);
-  } catch (error) {
-    console.error('Error fetching tipos:', error);
+  } else {
+    isEditable.value = true; // Habilitar edición si no hay id (crear nuevo tipo)
   }
 };
 
 const validateForm = () => {
   if (form.nombre.length > 200) {
     modalMessage.value = 'El nombre no puede exceder los 200 caracteres.';
-    showModal.value = true;
-    return false;
-  }
-  if (form.autor.length > 200) {
-    modalMessage.value = 'El autor no puede exceder los 200 caracteres.';
-    showModal.value = true;
-    return false;
-  }
-  if (form.fecha.length > 100) {
-    modalMessage.value = 'La fecha no puede exceder los 100 caracteres.';
-    showModal.value = true;
-    return false;
-  }
-  if (form.localizacion.length > 200) {
-    modalMessage.value = 'La localización no puede exceder los 200 caracteres.';
     showModal.value = true;
     return false;
   }
@@ -80,18 +57,18 @@ const submitForm = async () => {
   if (id) {
     showConfirmationDialog.value = true;
   } else {
-    await createObra();
+    await createTipo();
   }
 };
 
-const createObra = async () => {
+const createTipo = async () => {
   try {
-    await axios.post('/api/obras', form);
-    console.log('Obra creada:', form);
-    localStorage.setItem('aviso', 'Obra creada exitosamente'); // Guardar mensaje de aviso
-    router.push('/obra'); // Redirige a la lista de obras después de enviar el formulario
+    await axios.post('/api/tipos', form);
+    console.log('Tipo creado:', form);
+    localStorage.setItem('aviso', 'Tipo creado exitosamente'); // Guardar mensaje de aviso
+    router.push('/tipo'); // Redirige a la lista de tipos después de enviar el formulario
   } catch (error) {
-    console.error('Error creating obra:', error);
+    console.error('Error creating tipo:', error);
   }
 };
 
@@ -99,15 +76,19 @@ const confirmSubmit = async () => {
   showConfirmationDialog.value = false;
   isConfirming.value = true;
   try {
-    await axios.put(`/api/obras/${id}`, form);
-    console.log('Obra actualizada:', form);
-    localStorage.setItem('aviso', 'Obra actualizada exitosamente'); // Guardar mensaje de aviso
-    router.push('/obra'); // Redirige a la lista de obras después de enviar el formulario
+    await axios.put(`/api/tipos/${id}`, form);
+    console.log('Tipo actualizado:', form);
+    localStorage.setItem('aviso', 'Tipo actualizado exitosamente'); // Guardar mensaje de aviso
+    router.push('/tipo'); // Redirige a la lista de tipos después de enviar el formulario
   } catch (error) {
-    console.error('Error updating obra:', error);
+    console.error('Error updating tipo:', error);
   } finally {
     isConfirming.value = false;
   }
+};
+
+const enableEditing = () => {
+  isEditable.value = true;
 };
 
 const cancelSubmit = () => {
@@ -115,16 +96,15 @@ const cancelSubmit = () => {
 };
 
 const cancel = () => {
-  router.push('/obra');
+  router.push('/tipo');
 };
 
-onMounted(() => {
-  fetchObra();
-  fetchTipos(); // Llama a fetchTipos cuando el componente se monta
-});
+const truncate = (text, length) => {
+  return text.length > length ? text.substring(0, length) + '...' : text;
+};
+
+onMounted(fetchTipo);
 </script>
-
-
 
 <template>
   <div class="form-container">
@@ -132,39 +112,39 @@ onMounted(() => {
     <form @submit.prevent="submitForm">
       <div class="form-group">
         <label for="nombre">Nombre</label>
-        <input type="text" id="nombre" v-model="form.nombre" required />
+        <input type="text" id="nombre" v-model="form.nombre" :readonly="readonly" required />
       </div>
 
       <div class="form-group">
         <label for="autor">Autor</label>
-        <input type="text" id="autor" v-model="form.autor" required />
+        <input type="text" id="autor" v-model="form.autor" :readonly="readonly" required />
       </div>
 
       <div class="form-group">
         <label for="fecha">Fecha</label>
-        <input type="text" id="fecha" v-model="form.fecha" required />
+        <input type="text" id="fecha" v-model="form.fecha" :readonly="readonly" required />
       </div>
 
       <div class="form-group">
         <label for="localizacion">Localización</label>
-        <input type="text" id="localizacion" v-model="form.localizacion" required />
+        <input type="text" id="localizacion" v-model="form.localizacion" :readonly="readonly" required />
       </div>
 
       <div class="form-group">
         <label for="descripcion">Descripción</label>
-        <textarea id="descripcion" v-model="form.descripcion" required></textarea>
+        <textarea id="descripcion" v-model="form.descripcion" :readonly="readonly" required></textarea>
       </div>
 
       <div class="form-group">
         <label for="tipo">Tipo</label>
-        <select id="tipo" v-model="form.tipo" required>
+        <select id="tipo" v-model="form.tipo" :disabled="readonly" required>
           <option value="" disabled>Seleccione un tipo</option>
           <option v-for="tipo in tipos" :key="tipo.id" :value="tipo">{{ tipo.nombre }}</option>
         </select>
       </div>
 
       <div class="form-actions">
-        <button type="submit" class="submit-button">{{ id ? 'Modificar' : 'Crear' }}</button>
+        <button type="submit" class="submit-button" v-if="!readonly">{{ id ? 'Guardar cambios' : 'Crear' }}</button>
         <button type="button" @click="cancel" class="cancel-button">Cancelar</button>
       </div>
     </form>
@@ -188,8 +168,6 @@ onMounted(() => {
     </div>
   </div>
 </template>
-
-
 
 <style scoped>
 /* Contenedor del formulario */
