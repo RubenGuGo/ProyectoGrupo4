@@ -283,6 +283,7 @@ tbody tr:hover {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000; /* Aumentar el z-index para que se superponga a todos los elementos */
 }
 
 .delete-dialog-content {
