@@ -1,7 +1,6 @@
 package es.cic.grupo.Backend.model;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -43,7 +42,7 @@ public class Obra {
     private String descripcion;
     
     @ManyToOne
-    @JsonBackReference
+    @JsonIgnoreProperties("obras")
     @JoinColumn(name = "TIPO_ID")
     private Tipo tipo;
 

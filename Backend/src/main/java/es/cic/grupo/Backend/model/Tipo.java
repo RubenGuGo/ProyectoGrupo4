@@ -3,7 +3,6 @@ package es.cic.grupo.Backend.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -32,7 +31,7 @@ public class Tipo {
     @Column(name = "DESCRIPCION")
     private String descripcion;
     
-    @JsonManagedReference
+    
     @OneToMany(mappedBy = "tipo",cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     private List<Obra> obras;
     
