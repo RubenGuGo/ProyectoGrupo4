@@ -6,40 +6,66 @@ import { useRoute, useRouter } from 'vue-router';
 // Estado del formulario
 const form = reactive({
   nombre: '',
+  autor: '',
+  fecha: '',
+  localizacion: '',
   descripcion: '',
-  obras: []
+  tipo: null // Cambia a null para almacenar el objeto Tipo
 });
 
 // Estado para la ventana emergente
 const showConfirmationDialog = ref(false);
 const isConfirming = ref(false);
 
+const tipos = reactive([]); // Array para almacenar los tipos disponibles
+const showModal = ref(false); // Estado para controlar la visibilidad del modal
+const modalMessage = ref(''); // Mensaje del modal
+
 const route = useRoute();
 const router = useRouter();
 const id = route.params.id;
 const readonly = route.query.readonly === 'true'; // Obtener el parámetro readonly de la URL
 
-const showModal = ref(false); // Estado para controlar la visibilidad del modal
-const modalMessage = ref(''); // Mensaje del modal
-const isEditable = ref(!readonly); // Estado para controlar si el formulario es editable
-
-const fetchTipo = async () => {
+const fetchObra = async () => {
   if (id) {
     try {
-      const response = await axios.get(`/api/tipos/${id}`);
+      const response = await axios.get(`/api/obras/${id}`);
       Object.assign(form, response.data);
-      isEditable.value = !readonly; // Deshabilitar edición si es solo lectura
+      // Asegúrate de que el tipo se establezca correctamente
+      form.tipo = response.data.tipo;
     } catch (error) {
-      console.error('Error fetching tipo:', error);
+      console.error('Error fetching obra:', error);
     }
-  } else {
-    isEditable.value = true; // Habilitar edición si no hay id (crear nuevo tipo)
+  }
+};
+
+const fetchTipos = async () => {
+  try {
+    const response = await axios.get('/api/tipos');
+    tipos.push(...response.data);
+  } catch (error) {
+    console.error('Error fetching tipos:', error);
   }
 };
 
 const validateForm = () => {
   if (form.nombre.length > 200) {
     modalMessage.value = 'El nombre no puede exceder los 200 caracteres.';
+    showModal.value = true;
+    return false;
+  }
+  if (form.autor.length > 200) {
+    modalMessage.value = 'El autor no puede exceder los 200 caracteres.';
+    showModal.value = true;
+    return false;
+  }
+  if (form.fecha.length > 100) {
+    modalMessage.value = 'La fecha no puede exceder los 100 caracteres.';
+    showModal.value = true;
+    return false;
+  }
+  if (form.localizacion.length > 200) {
+    modalMessage.value = 'La localización no puede exceder los 200 caracteres.';
     showModal.value = true;
     return false;
   }
@@ -57,18 +83,22 @@ const submitForm = async () => {
   if (id) {
     showConfirmationDialog.value = true;
   } else {
-    await createTipo();
+    await createObra();
   }
 };
 
-const createTipo = async () => {
+const createObra = async () => {
   try {
-    await axios.post('/api/tipos', form);
-    console.log('Tipo creado:', form);
-    localStorage.setItem('aviso', 'Tipo creado exitosamente'); // Guardar mensaje de aviso
-    router.push('/tipo'); // Redirige a la lista de tipos después de enviar el formulario
+    await axios.post('/api/obras', form, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log('Obra creada:', form);
+    localStorage.setItem('aviso', 'Obra creada exitosamente'); // Guardar mensaje de aviso
+    router.push('/obra'); // Redirige a la lista de obras después de enviar el formulario
   } catch (error) {
-    console.error('Error creating tipo:', error);
+    console.error('Error creating obra:', error);
   }
 };
 
@@ -76,19 +106,19 @@ const confirmSubmit = async () => {
   showConfirmationDialog.value = false;
   isConfirming.value = true;
   try {
-    await axios.put(`/api/tipos/${id}`, form);
-    console.log('Tipo actualizado:', form);
-    localStorage.setItem('aviso', 'Tipo actualizado exitosamente'); // Guardar mensaje de aviso
-    router.push('/tipo'); // Redirige a la lista de tipos después de enviar el formulario
+    await axios.put(`/api/obras/${id}`, form, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log('Obra actualizada:', form);
+    localStorage.setItem('aviso', 'Obra actualizada exitosamente'); // Guardar mensaje de aviso
+    router.push('/obra'); // Redirige a la lista de obras después de enviar el formulario
   } catch (error) {
-    console.error('Error updating tipo:', error);
+    console.error('Error updating obra:', error);
   } finally {
     isConfirming.value = false;
   }
-};
-
-const enableEditing = () => {
-  isEditable.value = true;
 };
 
 const cancelSubmit = () => {
@@ -96,14 +126,13 @@ const cancelSubmit = () => {
 };
 
 const cancel = () => {
-  router.push('/tipo');
+  router.push('/obra');
 };
 
-const truncate = (text, length) => {
-  return text.length > length ? text.substring(0, length) + '...' : text;
-};
-
-onMounted(fetchTipo);
+onMounted(() => {
+  fetchObra();
+  fetchTipos(); // Llama a fetchTipos cuando el componente se monta
+});
 </script>
 
 <template>
@@ -144,7 +173,7 @@ onMounted(fetchTipo);
       </div>
 
       <div class="form-actions">
-        <button type="submit" class="submit-button" v-if="!readonly">{{ id ? 'Guardar cambios' : 'Crear' }}</button>
+        <button type="submit" class="submit-button" v-if="!readonly">{{ id ? 'Modificar' : 'Crear' }}</button>
         <button type="button" @click="cancel" class="cancel-button">Cancelar</button>
       </div>
     </form>
