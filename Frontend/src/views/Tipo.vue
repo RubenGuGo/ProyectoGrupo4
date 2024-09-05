@@ -88,16 +88,15 @@ onMounted(fetchTipos);
 
 <template>
   <div class="tipo-container">
-    <h1 class="title">Lista de Tipos</h1>
-    <p class="description">Aquí puedes explorar, crear, actualizar y eliminar los distintos tipos de obras de arte</p>
-    <button @click="createTipo" class="create-button">Crear Nuevo Tipo</button>
+    <h1 class="title">Tipos</h1>
+    <button @click="createTipo" class="create-button">Crear</button>
     <div v-for="aviso in avisos" :key="aviso.id" class="modal-aviso">{{ aviso.mensaje }}</div> <!-- Mostrar mensajes de aviso -->
 
     <table class="custom-table">
       <thead>
         <tr>
           <th>Nombre</th>
-          <th>Obras</th>
+          <th>Número de Obras</th>
           <th>Descripción</th>
           <th>Acciones</th>
         </tr>
@@ -105,15 +104,10 @@ onMounted(fetchTipos);
       <tbody>
         <tr v-for="tipo in tipos" :key="tipo.id">
           <td>{{ tipo.nombre }}</td>
-          <td>
-            <ul>
-              <!-- Mostrar solo los nombres de las obras -->
-              <li v-for="obra in tipo.obras" :key="obra.id">{{ obra.nombre }}</li>
-            </ul>
-          </td>
+          <td>{{ tipo.obras.length }}</td> <!-- Mostrar el número total de obras -->
           <td>{{ tipo.descripcion }}</td>
           <td>
-            <button @click="updateTipo(tipo.id)" class="action-button">Actualizar/Ver</button>
+            <button @click="updateTipo(tipo.id)" class="action-button">Ver/Actualizar</button>
             <button @click="deleteTipo(tipo.id)" class="action-button delete-button">Eliminar</button>
           </td>
         </tr>

@@ -78,28 +78,37 @@ const validateForm = () => {
   return true;
 };
 
-const submitForm = () => {
-  showConfirmationDialog.value = true;
+const submitForm = async () => {
+  if (!validateForm()) return;
+
+  if (id) {
+    showConfirmationDialog.value = true;
+  } else {
+    await createObra();
+  }
+};
+
+const createObra = async () => {
+  try {
+    await axios.post('/api/obras', form);
+    console.log('Obra creada:', form);
+    localStorage.setItem('aviso', 'Obra creada exitosamente'); // Guardar mensaje de aviso
+    router.push('/obra'); // Redirige a la lista de obras después de enviar el formulario
+  } catch (error) {
+    console.error('Error creating obra:', error);
+  }
 };
 
 const confirmSubmit = async () => {
   showConfirmationDialog.value = false;
   isConfirming.value = true;
-  if (!validateForm()) return;
-
   try {
-    if (id) {
-      await axios.put(`/api/obras/${id}`, form);
-      console.log('Obra actualizada:', form);
-      localStorage.setItem('aviso', 'Obra actualizada exitosamente'); // Guardar mensaje de aviso
-    } else {
-      await axios.post('/api/obras', form);
-      console.log('Obra creada:', form);
-      localStorage.setItem('aviso', 'Obra creada exitosamente'); // Guardar mensaje de aviso
-    }
+    await axios.put(`/api/obras/${id}`, form);
+    console.log('Obra actualizada:', form);
+    localStorage.setItem('aviso', 'Obra actualizada exitosamente'); // Guardar mensaje de aviso
     router.push('/obra'); // Redirige a la lista de obras después de enviar el formulario
   } catch (error) {
-    console.error('Error submitting form:', error);
+    console.error('Error updating obra:', error);
   } finally {
     isConfirming.value = false;
   }

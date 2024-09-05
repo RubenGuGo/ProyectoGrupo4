@@ -79,9 +79,8 @@ onMounted(fetchObras);
 
 <template>
   <div class="obra-container">
-    <h1 class="title">Lista de Obras</h1>
-    <p class="description">Aquí puedes explorar, crear, actualizar y eliminar obras de arte</p> 
-    <button @click="createObra" class="create-button">Crear Nueva Obra</button>
+    <h1 class="title">Obras de Arte</h1>
+    <button @click="createObra" class="create-button">Crear</button>
     <div v-for="aviso in avisos" :key="aviso.id" class="modal-aviso">{{ aviso.mensaje }}</div> <!-- Mostrar mensajes de aviso -->
     <table class="custom-table">
       <thead>
@@ -104,7 +103,7 @@ onMounted(fetchObras);
           <td>{{ obra.descripcion }}</td>
           <td>{{ obra.tipo }}</td>
           <td>
-            <button @click="updateObra(obra.id)" class="action-button">Actualizar</button>
+            <button @click="updateObra(obra.id)" class="action-button">Ver/Actualizar</button>
             <button @click="deleteObra(obra.id)" class="action-button delete-button">Borrar</button>
           </td>
         </tr>

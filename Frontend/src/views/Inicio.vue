@@ -2,7 +2,7 @@
   <main class="inicio">
     <div class="content">
       <h1>Bienvenido al Museo de Arte</h1>
-      <p>Descubre la belleza y la historia a través de nuestras colecciones.</p>
+      <p>Descubra la belleza y la historia a través de nuestras colecciones.</p>
       <div class="button-container">
         <a href="/tipo" class="cta-button primary-button">Explorar Tipos</a>
         <a href="/obra" class="cta-button secondary-button">Ver Obras</a>
