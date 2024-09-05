@@ -27,7 +27,7 @@ const fetchTipo = async () => {
     try {
       const response = await axios.get(`/api/tipos/${id}`);
       Object.assign(form, response.data);
-      isEditable.value = false; // Deshabilitar edición al cargar el tipo
+      isEditable.value = route.query.readonly !== 'true'; // Deshabilitar edición si readonly es true
     } catch (error) {
       console.error('Error fetching tipo:', error);
     }
@@ -53,32 +53,37 @@ const validateForm = () => {
 const submitForm = async () => {
   if (!validateForm()) return;
 
-  showConfirmationDialog.value = true;
+  if (id) {
+    showConfirmationDialog.value = true;
+  } else {
+    await createTipo();
+  }
+};
+
+const createTipo = async () => {
+  try {
+    await axios.post('/api/tipos', form);
+    console.log('Tipo creado:', form);
+    localStorage.setItem('aviso', 'Tipo creado exitosamente'); // Guardar mensaje de aviso
+    router.push('/tipo'); // Redirige a la lista de tipos después de enviar el formulario
+  } catch (error) {
+    console.error('Error creating tipo:', error);
+  }
 };
 
 const confirmSubmit = async () => {
   showConfirmationDialog.value = false;
   isConfirming.value = true;
   try {
-    if (id) {
-      await axios.put(`/api/tipos/${id}`, form);
-      console.log('Tipo actualizado:', form);
-      localStorage.setItem('aviso', 'Tipo actualizado exitosamente'); // Guardar mensaje de aviso
-    } else {
-      await axios.post('/api/tipos', form);
-      console.log('Tipo creado:', form);
-      localStorage.setItem('aviso', 'Tipo creado exitosamente'); // Guardar mensaje de aviso
-    }
+    await axios.put(`/api/tipos/${id}`, form);
+    console.log('Tipo actualizado:', form);
+    localStorage.setItem('aviso', 'Tipo actualizado exitosamente'); // Guardar mensaje de aviso
     router.push('/tipo'); // Redirige a la lista de tipos después de enviar el formulario
   } catch (error) {
-    console.error('Error submitting form:', error);
+    console.error('Error updating tipo:', error);
   } finally {
     isConfirming.value = false;
   }
-};
-
-const enableEditing = () => {
-  isEditable.value = true;
 };
 
 const cancelSubmit = () => {
@@ -89,9 +94,12 @@ const cancel = () => {
   router.push('/tipo');
 };
 
+const truncate = (text, length) => {
+  return text.length > length ? text.substring(0, length) + '...' : text;
+};
+
 onMounted(fetchTipo);
 </script>
-
 
 <template>
   <div class="form-container">
@@ -107,24 +115,31 @@ onMounted(fetchTipo);
         <textarea id="descripcion" v-model="form.descripcion" :readonly="!isEditable" required></textarea>
       </div>
 
+      <!-- Mostrar la sección de Obras solo si hay un id (es decir, cuando se está editando un tipo existente) -->
+      <div class="form-group" v-if="id">
+        <label>Obras</label>
+        <ul class="obras-list">
+          <li v-for="obra in form.obras" :key="obra.id">{{ truncate(obra.nombre, 50) }}</li>
+        </ul>
+      </div>
+
       <div class="form-actions">
-        <button type="submit" class="submit-button" v-if="isEditable">{{ id ? 'Modificar' : 'Crear' }}</button>
-        <button type="button" @click="enableEditing" v-if="!isEditable" class="enable-edit-button">Habilitar Edición</button>
+        <button type="submit" class="submit-button" v-if="isEditable">{{ id ? 'Guardar cambios' : 'Crear' }}</button>
         <button type="button" @click="cancel" class="cancel-button">Cancelar</button>
       </div>
     </form>
 
-  <div v-if="showModal" class="modal">
-    <div class="modal-content">
-      <span class="close" @click="showModal = false">&times;</span>
-      <p>{{ modalMessage }}</p>
+    <div v-if="showModal" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="showModal = false">&times;</span>
+        <p>{{ modalMessage }}</p>
+      </div>
     </div>
-  </div>
     
     <!-- Ventana Emergente de Confirmación -->
     <div v-if="showConfirmationDialog" class="confirmation-dialog">
       <div class="confirmation-dialog-content">
-        <p>¿Estás seguro de que deseas enviar el formulario?</p>
+        <p>¿Estás seguro de que deseas actualizar el tipo de obra?</p>
         <div class="confirmation-dialog-buttons">
           <button @click="confirmSubmit" class="confirm-button">Aceptar</button>
           <button @click="cancelSubmit" class="cancel-button">Cancelar</button>
@@ -133,7 +148,6 @@ onMounted(fetchTipo);
     </div>
   </div>
 </template>
-
 
 <style scoped>
 /* Contenedor del formulario */
@@ -184,6 +198,26 @@ input, textarea {
 input:focus, textarea:focus {
   border-color: #63b3ed;
   outline: none;
+}
+
+/* Lista de obras */
+.obras-list {
+  list-style-type: none;
+  padding: 0;
+  max-height: 200px; /* Limitar la altura de la lista */
+  overflow-y: auto; /* Añadir scroll vertical */
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  background-color: #edf2f7;
+}
+
+.obras-list li {
+  padding: 10px;
+  border-bottom: 1px solid #cbd5e0;
+}
+
+.obras-list li:last-child {
+  border-bottom: none;
 }
 
 /* Botones */

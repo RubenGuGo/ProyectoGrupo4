@@ -33,27 +33,30 @@ import { RouterLink, RouterView } from 'vue-router';
   top: 0;
   left: 0;
   width: 100%;
-  background-color: #fff;
-  border-bottom: 1px solid #ddd;
-  padding: 10px 0;
-  text-align: center;
-  z-index: 1000;
+  height: 80px; /* Aumenta la altura de la barra de navegación */
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: #333;
+  color: white;
+  font-size: 1.2rem; /* Aumenta el tamaño de la fuente */
+  padding: 0 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .navbar a {
-  margin: 0 15px;
+  color: white;
   text-decoration: none;
-  color: #333;
+  padding: 10px 20px;
 }
 
-.navbar a.active {
-  font-weight: bold;
-  color: #000;
+.navbar a:hover {
+  background-color: #444;
+  border-radius: 5px;
 }
 
 .main-content {
-  margin-top: 60px; /* Ajusta este valor según la altura de tu barra de navegación */
-  flex: 1;
-  overflow-x: hidden; /* Evita el desplazamiento horizontal */
+  margin-top: 80px; /* Ajusta el margen superior para evitar que el contenido se superponga con la barra de navegación */
+  padding: 20px;
 }
-</style>
+</style>  

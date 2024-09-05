@@ -49,8 +49,12 @@ const cancelDelete = () => {
   obraToDelete.value = null; // Limpia el ID de la obra a eliminar
 };
 
+const viewObra = async (id) => {
+  router.push({ name: 'ObraForm', params: { id }, query: { readonly: true } });
+};
+
 const updateObra = async (id) => {
-  router.push({ name: 'ObraForm', params: { id } });
+  router.push({ name: 'ObraForm', params: { id }, query: { readonly: false } });
 };
 
 const createObra = async () => {
@@ -79,37 +83,39 @@ onMounted(fetchObras);
 
 <template>
   <div class="obra-container">
-    <h1 class="title">Lista de Obras</h1>
-    <p class="description">Aquí puedes explorar, crear, actualizar y eliminar obras de arte</p> 
-    <button @click="createObra" class="create-button">Crear Nueva Obra</button>
+    <h1 class="title">Obras de Arte</h1>
+    <button @click="createObra" class="create-button">Crear</button>
     <div v-for="aviso in avisos" :key="aviso.id" class="modal-aviso">{{ aviso.mensaje }}</div> <!-- Mostrar mensajes de aviso -->
-    <table class="custom-table">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Autor</th>
-          <th>Fecha</th>
-          <th>Localización</th>
-          <th>Descripción</th>
-          <th>Tipo</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="obra in obras" :key="obra.id">
-          <td>{{ obra.nombre }}</td>
-          <td>{{ obra.autor }}</td>
-          <td>{{ obra.fecha }}</td>
-          <td>{{ obra.localizacion }}</td>
-          <td>{{ obra.descripcion }}</td>
-          <td>{{ obra.tipo }}</td>
-          <td>
-            <button @click="updateObra(obra.id)" class="action-button">Actualizar</button>
-            <button @click="deleteObra(obra.id)" class="action-button delete-button">Borrar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Autor</th>
+            <th>Fecha</th>
+            <th>Localización</th>
+            <th>Descripción</th>
+            <th>Tipo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="obra in obras" :key="obra.id">
+            <td>{{ obra.nombre }}</td>
+            <td>{{ obra.autor }}</td>
+            <td>{{ obra.fecha }}</td>
+            <td>{{ obra.localizacion }}</td>
+            <td>{{ obra.descripcion }}</td>
+            <td>{{ obra.tipo }}</td>
+            <td class="action-buttons">
+              <button @click="viewObra(obra.id)" class="action-button">Ver</button>
+              <button @click="updateObra(obra.id)" class="action-button">Editar</button>
+              <button @click="deleteObra(obra.id)" class="action-button delete-button">Borrar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <!-- Ventana emergente de confirmación de eliminación -->
     <div v-if="showDeleteDialog" class="delete-dialog">
@@ -126,7 +132,7 @@ onMounted(fetchObras);
 
 <style scoped>
 .obra-container {
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 40px auto; /* Ajuste en el margen superior */
   padding: 20px;
   background-color: #1b262c;
@@ -136,8 +142,8 @@ onMounted(fetchObras);
   text-align: center; /* Cambiado de center a left para un mejor alineamiento */
   word-wrap: break-word;
   white-space: pre-wrap;
+  min-height: 80vh; /* Aumenta la altura mínima para ocupar más pantalla verticalmente */
 }
-
 
 .title {
   font-size: 2.5rem;
@@ -185,6 +191,13 @@ onMounted(fetchObras);
   margin-top: 10px;
 }
 
+.table-container {
+  max-height: 500px; /* Ajusta la altura máxima según sea necesario */
+  overflow-y: auto; /* Añadir scroll vertical */
+  overflow-x: auto; /* Añadir scroll horizontal */
+  position: relative; /* Necesario para la cabecera fija */
+}
+
 .custom-table {
   width: 100%;
   border-collapse: collapse;
@@ -208,6 +221,9 @@ th {
   color: #ecf0f1;
   text-transform: uppercase;
   letter-spacing: 1px;
+  position: sticky; /* Hacer la cabecera fija */
+  top: 0; /* Posición fija en la parte superior */
+  z-index: 1; /* Asegurar que la cabecera esté por encima del contenido */
 }
 
 tbody tr {
@@ -224,6 +240,11 @@ td {
 
 tbody tr:hover {
   background-color: #28527a;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px; /* Espacio entre los botones */
 }
 
 .action-button {
