@@ -88,31 +88,33 @@ onMounted(fetchTipos);
 
 <template>
   <div class="tipo-container">
-    <h1 class="title">Tipos</h1>
+    <h1 class="title">Tipos de obras de arte</h1>
     <button @click="createTipo" class="create-button">Crear</button>
     <div v-for="aviso in avisos" :key="aviso.id" class="modal-aviso">{{ aviso.mensaje }}</div> <!-- Mostrar mensajes de aviso -->
 
-    <table class="custom-table">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Número de Obras</th>
-          <th>Descripción</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="tipo in tipos" :key="tipo.id">
-          <td>{{ tipo.nombre }}</td>
-          <td>{{ tipo.obras.length }}</td> <!-- Mostrar el número total de obras -->
-          <td>{{ tipo.descripcion }}</td>
-          <td>
-            <button @click="updateTipo(tipo.id)" class="action-button">Ver/Actualizar</button>
-            <button @click="deleteTipo(tipo.id)" class="action-button delete-button">Eliminar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Número de Obras</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="tipo in tipos" :key="tipo.id">
+            <td>{{ tipo.nombre }}</td>
+            <td>{{ tipo.obras.length }}</td> <!-- Mostrar el número total de obras -->
+            <td>{{ tipo.descripcion }}</td>
+            <td>
+              <button @click="updateTipo(tipo.id)" class="action-button">Ver/Actualizar</button>
+              <button @click="deleteTipo(tipo.id)" class="action-button delete-button">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <!-- Diálogo de eliminación -->
     <div v-if="showDeleteDialog" class="delete-dialog">
@@ -147,6 +149,7 @@ onMounted(fetchTipos);
   border-radius: 15px;
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);  /* Sombra más intensa */
   text-align: center; /* Centrar el texto */
+  min-height: 80vh; /* Aumenta la altura mínima para ocupar más pantalla verticalmente */
 }
 
 /* Título */
@@ -198,6 +201,14 @@ onMounted(fetchTipos);
   margin-top: 10px; /* Espacio entre mensajes */
 }
 
+/* Contenedor de la tabla */
+.table-container {
+  max-height: 500px; /* Ajusta la altura máxima según sea necesario */
+  overflow-y: auto; /* Añadir scroll vertical */
+  overflow-x: auto; /* Añadir scroll horizontal */
+  position: relative; /* Necesario para la cabecera fija */
+}
+
 /* Tabla */
 .custom-table {
   width: 100%;
@@ -221,6 +232,9 @@ th {
   color: #ecf0f1;
   text-transform: uppercase;
   letter-spacing: 1px;
+  position: sticky; /* Hacer la cabecera fija */
+  top: 0; /* Posición fija en la parte superior */
+  z-index: 1; /* Asegurar que la cabecera esté por encima del contenido */
 }
 
 td {

@@ -181,7 +181,7 @@ onMounted(() => {
     <!-- Ventana Emergente de Confirmación -->
     <div v-if="showConfirmationDialog" class="confirmation-dialog">
       <div class="confirmation-dialog-content">
-        <p>¿Estás seguro de que deseas enviar el formulario?</p>
+        <p>¿Estás seguro de que deseas actualizar la obra?</p>
         <div class="confirmation-dialog-buttons">
           <button @click="confirmSubmit" class="confirm-button">Aceptar</button>
           <button @click="cancelSubmit" class="cancel-button">Cancelar</button>

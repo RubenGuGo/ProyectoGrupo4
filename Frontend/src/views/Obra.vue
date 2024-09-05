@@ -82,33 +82,35 @@ onMounted(fetchObras);
     <h1 class="title">Obras de Arte</h1>
     <button @click="createObra" class="create-button">Crear</button>
     <div v-for="aviso in avisos" :key="aviso.id" class="modal-aviso">{{ aviso.mensaje }}</div> <!-- Mostrar mensajes de aviso -->
-    <table class="custom-table">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Autor</th>
-          <th>Fecha</th>
-          <th>Localización</th>
-          <th>Descripción</th>
-          <th>Tipo</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="obra in obras" :key="obra.id">
-          <td>{{ obra.nombre }}</td>
-          <td>{{ obra.autor }}</td>
-          <td>{{ obra.fecha }}</td>
-          <td>{{ obra.localizacion }}</td>
-          <td>{{ obra.descripcion }}</td>
-          <td>{{ obra.tipo }}</td>
-          <td>
-            <button @click="updateObra(obra.id)" class="action-button">Ver/Actualizar</button>
-            <button @click="deleteObra(obra.id)" class="action-button delete-button">Borrar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Autor</th>
+            <th>Fecha</th>
+            <th>Localización</th>
+            <th>Descripción</th>
+            <th>Tipo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="obra in obras" :key="obra.id">
+            <td>{{ obra.nombre }}</td>
+            <td>{{ obra.autor }}</td>
+            <td>{{ obra.fecha }}</td>
+            <td>{{ obra.localizacion }}</td>
+            <td>{{ obra.descripcion }}</td>
+            <td>{{ obra.tipo }}</td>
+            <td>
+              <button @click="updateObra(obra.id)" class="action-button">Ver/Actualizar</button>
+              <button @click="deleteObra(obra.id)" class="action-button delete-button">Borrar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <!-- Ventana emergente de confirmación de eliminación -->
     <div v-if="showDeleteDialog" class="delete-dialog">
@@ -135,8 +137,8 @@ onMounted(fetchObras);
   text-align: center; /* Cambiado de center a left para un mejor alineamiento */
   word-wrap: break-word;
   white-space: pre-wrap;
+  min-height: 80vh; /* Aumenta la altura mínima para ocupar más pantalla verticalmente */
 }
-
 
 .title {
   font-size: 2.5rem;
@@ -184,6 +186,13 @@ onMounted(fetchObras);
   margin-top: 10px;
 }
 
+.table-container {
+  max-height: 500px; /* Ajusta la altura máxima según sea necesario */
+  overflow-y: auto; /* Añadir scroll vertical */
+  overflow-x: auto; /* Añadir scroll horizontal */
+  position: relative; /* Necesario para la cabecera fija */
+}
+
 .custom-table {
   width: 100%;
   border-collapse: collapse;
@@ -207,6 +216,9 @@ th {
   color: #ecf0f1;
   text-transform: uppercase;
   letter-spacing: 1px;
+  position: sticky; /* Hacer la cabecera fija */
+  top: 0; /* Posición fija en la parte superior */
+  z-index: 1; /* Asegurar que la cabecera esté por encima del contenido */
 }
 
 tbody tr {
