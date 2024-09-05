@@ -15,15 +15,19 @@ const id = route.params.id;
 
 const showModal = ref(false); // Estado para controlar la visibilidad del modal
 const modalMessage = ref(''); // Mensaje del modal
+const isEditable = ref(false); // Estado para controlar si el formulario es editable
 
 const fetchTipo = async () => {
   if (id) {
     try {
       const response = await axios.get(`/api/tipos/${id}`);
       Object.assign(form, response.data);
+      isEditable.value = false; // Deshabilitar edición al cargar el tipo
     } catch (error) {
       console.error('Error fetching tipo:', error);
     }
+  } else {
+    isEditable.value = true; // Habilitar edición si no hay id (crear nuevo tipo)
   }
 };
 
@@ -60,6 +64,10 @@ const submitForm = async () => {
   }
 };
 
+const enableEditing = () => {
+  isEditable.value = true;
+};
+
 const cancel = () => {
   router.push('/tipo');
 };
@@ -72,16 +80,17 @@ onMounted(fetchTipo);
   <form @submit.prevent="submitForm">
     <div class="form-group">
       <label for="nombre">Nombre</label>
-      <input type="text" id="nombre" v-model="form.nombre" required />
+      <input type="text" id="nombre" v-model="form.nombre" :readonly="!isEditable" required />
     </div>
 
     <div class="form-group">
       <label for="descripcion">Descripción</label>
-      <textarea id="descripcion" v-model="form.descripcion" required></textarea>
+      <textarea id="descripcion" v-model="form.descripcion" :readonly="!isEditable" required></textarea>
     </div>
 
-    <button type="submit">Enviar</button>
-    <button type="button" @click="cancel">Cancelar</button>
+    <button type="submit" v-if="isEditable">{{ id ? 'Modificar' : 'Crear' }}</button>
+    <button type="button" @click="enableEditing" v-if="!isEditable" class="enable-edit-button">Habilitar Edición</button>
+    <button type="button" @click="cancel" class="cancel-button">Cancelar</button>
   </form>
 
   <div v-if="showModal" class="modal">
@@ -120,11 +129,19 @@ button:hover {
   background-color: #0056b3;
 }
 
-button[type="button"] {
+.enable-edit-button {
+  background-color: #28a745;
+}
+
+.enable-edit-button:hover {
+  background-color: #218838;
+}
+
+.cancel-button {
   background-color: #dc3545;
 }
 
-button[type="button"]:hover {
+.cancel-button:hover {
   background-color: #c82333;
 }
 
