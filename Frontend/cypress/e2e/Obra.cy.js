@@ -29,19 +29,18 @@ describe('Obra Page', () => {
     })
     
     cy.get('.submit-button').click()
-    cy.get('.confirmation-dialog .confirm-button').click()
     cy.url().should('include', '/obra')
     cy.get('table.custom-table tbody tr').should('contain', 'Nueva Obra')
   })
 
   it('Navega a la página de actualización', () => {
-    cy.get('table.custom-table tbody tr').first().find('.action-button').contains('Actualizar').click()
+    cy.get('table.custom-table tbody tr').first().find('.action-button').contains('Editar').click()
     cy.url().should('include', '/obraForm')
     cy.get('h1').should('contain', 'Modificar')
   })
 
   it('Actualiza una obra', () => {
-    cy.get('table.custom-table tbody tr').first().find('.action-button').contains('Actualizar').click()
+    cy.get('table.custom-table tbody tr').first().find('.action-button').contains('Editar').click()
     cy.url().should('include', '/obraForm')
     cy.get('#nombre').clear().type('Obra Actualizada')
     cy.get('#tipo').find('option:not([disabled])').then(options => {
