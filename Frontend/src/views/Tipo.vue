@@ -150,7 +150,7 @@ onMounted(fetchTipos);
   max-width: 1400px;
   margin: 40px auto;
   padding: 40px 20px;
-  background-color: #1b262c;  /* Azul marino oscuro */
+  background-color: #e2e8f0;  /* Azul marino oscuro */
   border-radius: 15px;
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);  /* Sombra más intensa */
   text-align: center; /* Centrar el texto */
@@ -160,7 +160,7 @@ onMounted(fetchTipos);
 /* Título */
 .title {
   font-size: 2.5rem;
-  color: #bbe1fa;  /* Azul claro vibrante */
+  color: #34495e;  /* Azul claro vibrante */
   margin-bottom: 30px;
   font-weight: bold;
   text-transform: uppercase;
@@ -228,7 +228,7 @@ th, td {
   text-align: left;
   font-size: 1rem;
   border-bottom: 1px solid #34495e;
-  color: #ecf0f1;  /* Texto blanco suave */
+  color: #1d2122;  /* Texto blanco suave */
 }
 
 /* Encabezados de la tabla */
@@ -251,7 +251,7 @@ td {
 
 /* Filas de la tabla */
 tbody tr {
-  background-color: #1b262c;  /* Azul marino oscuro */
+  background-color: #f1f2f6;  /* Azul marino oscuro */
   transition: background-color 0.2s ease;
 }
 

@@ -135,7 +135,7 @@ onMounted(fetchObras);
   max-width: 1600px;
   margin: 40px auto; /* Ajuste en el margen superior */
   padding: 20px;
-  background-color: #1b262c;
+  background-color: #e2e8f0;
   border-radius: 15px;
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
   color: #bbe1fa;
@@ -147,7 +147,7 @@ onMounted(fetchObras);
 
 .title {
   font-size: 2.5rem;
-  color: #bbe1fa;
+  color: #34495e;
   margin-bottom: 30px;
   font-weight: bold;
   text-transform: uppercase;
@@ -202,7 +202,7 @@ onMounted(fetchObras);
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-  background-color: #1c3b4d;
+  background-color: #dfe6e9;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   word-wrap: break-word;
   white-space: pre-wrap;
@@ -213,7 +213,7 @@ th, td {
   text-align: left;
   font-size: 1rem;
   border-bottom: 1px solid #34495e;
-  color: #ecf0f1;
+  color: #1d2122;
 }
 
 th {
@@ -227,7 +227,7 @@ th {
 }
 
 tbody tr {
-  background-color: #1b262c;
+  background-color: #f1f2f6;
   transition: background-color 0.2s ease;
 }
 
